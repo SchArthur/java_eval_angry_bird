@@ -17,6 +17,9 @@ public class Principal extends Canvas implements KeyListener {
     private Oiseau oiseau;
     private Tuyau tuyau;
 
+    private boolean pause = false;
+    private int score = 0;
+
     public Principal() throws InterruptedException {
 
         fenetre.setSize(LARGEUR, HAUTEUR);
@@ -49,7 +52,9 @@ public class Principal extends Canvas implements KeyListener {
         demarrer();
     }
 
-    public void demarrer() throws InterruptedException {
+    public void reset() {
+
+        pause = false;
 
         oiseau = new Oiseau();
         oiseau.setX(200);
@@ -59,7 +64,16 @@ public class Principal extends Canvas implements KeyListener {
         tuyau.setX(LARGEUR);
         tuyau.setY(300);
 
-        while(true) {
+        score = 0;
+    }
+
+    public void demarrer() throws InterruptedException {
+
+        reset();
+
+        while(!pause) {
+
+            score ++;
 
             Graphics2D dessin = (Graphics2D) this.getBufferStrategy().getDrawGraphics();
 
@@ -71,6 +85,14 @@ public class Principal extends Canvas implements KeyListener {
 
             tuyau.deplacement();
             tuyau.dessiner(dessin);
+
+            if(tuyau.testCollision(oiseau) || oiseau.getY() > HAUTEUR - 50) {
+                pause = true;
+            }
+
+            dessin.setColor(Color.BLACK);
+            dessin.setFont(new Font("Arial", Font.BOLD, 20));
+            dessin.drawString("score " + score, LARGEUR - 200 ,20);
 
             //enregistrement du dessin
             dessin.dispose();
@@ -100,7 +122,14 @@ public class Principal extends Canvas implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-            oiseau.saut();
+
+            System.out.println("toto");
+
+            if(pause) {
+                reset();
+            } else {
+                oiseau.saut();
+            }
         }
     }
 }
