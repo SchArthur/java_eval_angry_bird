@@ -40,7 +40,7 @@ public class Tuyau extends Sprite{
 
     public void gereImpactAvecJoueur(Sprite cible, Graphics2D dessin){
         dessin.setColor(new Color(184,0,0));
-        if (cible.getY() < y-ecartement-Principal.HAUTEUR){
+        if (cible.getY() < y-ecartement){
             dessin.fillRect(x,y-ecartement-Principal.HAUTEUR, largeur, Principal.HAUTEUR);
         } else {
             dessin.fillRect(x,y, largeur, Principal.HAUTEUR);
