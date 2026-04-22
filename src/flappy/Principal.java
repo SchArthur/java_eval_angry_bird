@@ -1,18 +1,17 @@
 package flappy;
 
-import flappy.models.Bonus;
-import flappy.models.Nuage;
-import flappy.models.Oiseau;
-import flappy.models.Tuyau;
+import flappy.models.*;
 import flappy.utils.Utils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class Principal extends Canvas implements KeyListener {
+public class Principal extends Canvas implements KeyListener, MouseListener {
 
     public static final int LARGEUR = 800;
     public static final int HAUTEUR = 600;
@@ -22,6 +21,11 @@ public class Principal extends Canvas implements KeyListener {
     private Tuyau tuyau;
     private Nuage[] nuages = new Nuage[10];
     private ArrayList<Bonus> listeBonus = new ArrayList<>();
+    private ArrayList<Projectile> listProjectile = new ArrayList<>();
+    private int projectileCooldown = 30; // frames
+    private int tirTimer = projectileCooldown;
+
+    private boolean tir = false;
 
     private boolean pause = false;
 
@@ -41,7 +45,7 @@ public class Principal extends Canvas implements KeyListener {
 
         //addEventListener("click", () => console.log("coucou") )
         fenetre.addKeyListener(this);
-
+        this.addMouseListener(this);
 
         JPanel panel = new JPanel();
         panel.add(this);
@@ -74,6 +78,9 @@ public class Principal extends Canvas implements KeyListener {
 
         deplacementGauche = false;
         deplacementDroite = false;
+
+        tirTimer = projectileCooldown;
+        tir = false;
 
         oiseau = new Oiseau();
         oiseau.setX(200);
@@ -156,6 +163,27 @@ public class Principal extends Canvas implements KeyListener {
                     oiseau.deplacementHorizontal(true);
                 }
 
+                //---- PRojectile ----
+
+                tirTimer++;
+                System.out.println(listProjectile.size());
+                if (tir && tirTimer > projectileCooldown) {
+                    tirTimer = 0;
+                    listProjectile.add(new Projectile(oiseau.getX() + oiseau.getLargeur()/2, oiseau.getY() + oiseau.getLargeur()/2));
+                }
+                tir = false;
+                ArrayList<Projectile> projectileADetruire = new ArrayList<>();
+                for(Projectile projectile : listProjectile) {
+                    projectile.deplacement();
+                    projectile.dessiner(dessin);
+                    if (projectile.doitDetruire()){
+                        projectileADetruire.add(projectile);
+                    }
+                }
+                for (Projectile projectile : projectileADetruire) {
+                    listProjectile.remove(projectile);
+                }
+
                 //---- tuyau ----
 
                 tuyau.deplacement();
@@ -219,5 +247,29 @@ public class Principal extends Canvas implements KeyListener {
                 oiseau.saut();
             }
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        tir = true;
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
