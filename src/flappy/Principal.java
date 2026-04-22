@@ -24,6 +24,10 @@ public class Principal extends Canvas implements KeyListener {
     private ArrayList<Bonus> listeBonus = new ArrayList<>();
 
     private boolean pause = false;
+
+    private boolean deplacementGauche = false;
+    private boolean deplacementDroite = false;
+
     private int score = 0;
     private int iteration = 0;
 
@@ -67,6 +71,9 @@ public class Principal extends Canvas implements KeyListener {
     public void reset() {
 
         pause = false;
+
+        deplacementGauche = false;
+        deplacementDroite = false;
 
         oiseau = new Oiseau();
         oiseau.setX(200);
@@ -141,6 +148,14 @@ public class Principal extends Canvas implements KeyListener {
                 oiseau.deplacement();
                 oiseau.dessiner(dessin);
 
+                //Deplacement vertical
+
+                if (deplacementDroite) {
+                    oiseau.deplacementHorizontal(false);
+                } else if (deplacementGauche) {
+                    oiseau.deplacementHorizontal(true);
+                }
+
                 //---- tuyau ----
 
                 tuyau.deplacement();
@@ -181,13 +196,23 @@ public class Principal extends Canvas implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+            deplacementDroite = true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_Q) {
+            deplacementGauche = true;
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+            deplacementDroite = false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_Q) {
+            deplacementGauche = false;
+        }
         if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-
             if(pause) {
                 reset();
             } else {
