@@ -23,8 +23,6 @@ public class Principal extends Canvas implements KeyListener {
     private Nuage[] nuages = new Nuage[10];
     private ArrayList<Bonus> listeBonus = new ArrayList<>();
 
-    private int[] tableauEntier = new int[5];
-    private int[] tableauEntier2 = {45,12,2,89,1};
 
     private boolean pause = false;
     private int score = 0;
@@ -120,9 +118,23 @@ public class Principal extends Canvas implements KeyListener {
                     listeBonus.add(new Bonus());
                 }
 
+                //pour eviter de supprimer des element alors que l'on parcourt la liste
+                //on créait une liste vide qui va stocker les bonus touche, puis on les supprimera
+                ArrayList<Bonus> bonusTouche = new ArrayList<>();
+
                 for(Bonus bonus : listeBonus) {
                     bonus.deplacement();
                     bonus.dessiner(dessin);
+
+                    if(oiseau.testCollision(bonus)) {
+                        score+=100;
+                        bonusTouche.add(bonus);
+                    }
+                }
+
+                //on supprime tous les bonus touche
+                for(Bonus bonus : bonusTouche) {
+                    listeBonus.remove(bonus);
                 }
 
                 //---- oiseau ----
@@ -137,7 +149,6 @@ public class Principal extends Canvas implements KeyListener {
 
                 if (tuyau.testCollision(oiseau) || oiseau.getY() > HAUTEUR - 50) {
                     pause = true;
-
                 }
 
                 //---- UI ----

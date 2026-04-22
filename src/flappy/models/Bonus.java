@@ -11,13 +11,6 @@ public class Bonus extends Sprite {
         largeur = 25;
         x = Principal.LARGEUR;
         y = Utils.aleatoire(25, Principal.HAUTEUR - 25);
-
-        zones = new Zone[]{
-                    new Zone(
-                        new Point(x, y),
-                        new Point(x + largeur, y),
-                        new Point(x, y + largeur),
-                        new Point(x + largeur, y + largeur))};
     }
 
     @Override

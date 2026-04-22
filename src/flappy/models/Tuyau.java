@@ -31,5 +31,21 @@ public class Tuyau extends Sprite{
         dessin.fillRect(x,y-ecartement-Principal.HAUTEUR, largeur, Principal.HAUTEUR);
     }
 
+    @Override
+    public Zone[] getZones() {
 
+        Zone zoneTuyauBas = new Zone(
+                new Point(x, y),
+                new Point(x + largeur, y),
+                new Point(x, y + Principal.HAUTEUR),
+                new Point(x+ largeur, y + Principal.HAUTEUR));
+
+        Zone zoneTuyauHaut = new Zone(
+                new Point(x, y - Principal.HAUTEUR),
+                new Point(x + largeur, y - Principal.HAUTEUR),
+                new Point(x, y - ecartement),
+                new Point(x+ largeur, y - ecartement));
+
+        return new Zone[]{zoneTuyauBas, zoneTuyauHaut};
+    }
 }
