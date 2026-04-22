@@ -9,6 +9,8 @@ public class Oiseau extends Sprite{
 
     protected float gravite = 1.0f;
 
+    private int hauteurBec = 20;
+
     public Oiseau() {
         largeur = 50;
         setCouleur(Color.RED);
@@ -33,6 +35,13 @@ public class Oiseau extends Sprite{
         dessin.fillOval(x,y, largeur, largeur);
 
         // BEC
+        dessin.setColor(Color.ORANGE);
+
+        Polygon bec = new Polygon();
+        bec.addPoint(x + largeur, y + (largeur/2) - (hauteurBec/2)); // haut
+        bec.addPoint(x + largeur + 20, y + largeur/2); // bout du bec
+        bec.addPoint(x + largeur, y + (largeur/2) + (hauteurBec/2)); // bas
+        dessin.fill(bec);
     }
 
 
@@ -47,5 +56,21 @@ public class Oiseau extends Sprite{
 
     public void setGravite(float gravite) {
         this.gravite = gravite;
+    }
+
+    @Override
+    public Zone[] getZones(){
+        return new Zone[]{
+                new Zone(
+                        new Point(x, y),
+                        new Point(x + largeur, y),
+                        new Point(x, y + largeur),
+                        new Point(x + largeur, y + largeur)),
+                new Zone(
+                    new Point(x + largeur, y + (largeur/2) - (hauteurBec/2)),
+                    new Point(x + largeur + 20, y + largeur/2),
+                    new Point(x + largeur, y + (largeur/2) + (hauteurBec/2)),
+                    new Point(x + largeur + 20, y + largeur/2))
+        };
     }
 }
