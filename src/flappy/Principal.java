@@ -1,5 +1,6 @@
 package flappy;
 
+import flappy.models.Bonus;
 import flappy.models.Nuage;
 import flappy.models.Oiseau;
 import flappy.models.Tuyau;
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class Principal extends Canvas implements KeyListener {
 
@@ -19,11 +21,17 @@ public class Principal extends Canvas implements KeyListener {
     private Oiseau oiseau;
     private Tuyau tuyau;
     private Nuage[] nuages = new Nuage[10];
+    private ArrayList<Bonus> listeBonus = new ArrayList<>();
+
+    private int[] tableauEntier = new int[5];
+    private int[] tableauEntier2 = {45,12,2,89,1};
 
     private boolean pause = false;
     private int score = 0;
+    private int iteration = 0;
 
     public Principal() throws InterruptedException {
+
 
         fenetre.setSize(LARGEUR, HAUTEUR);
 
@@ -89,19 +97,40 @@ public class Principal extends Canvas implements KeyListener {
             if(!pause) {
 
                 score++;
+                iteration ++;
 
                 Graphics2D dessin = (Graphics2D) this.getBufferStrategy().getDrawGraphics();
 
+                //---- fond ----
+
                 dessin.setColor(Color.CYAN);
                 dessin.fillRect(0, 0, LARGEUR, HAUTEUR);
+
+                //---- nuages ----
 
                 for(Nuage nuage : nuages) {
                     nuage.deplacement();
                     nuage.dessiner(dessin);
                 }
 
+                //---- bonus ----
+
+                //on fait apparaitre un bonus toutes les 2 secondes
+                if(iteration % 120 == 0) {
+                    listeBonus.add(new Bonus());
+                }
+
+                for(Bonus bonus : listeBonus) {
+                    bonus.deplacement();
+                    bonus.dessiner(dessin);
+                }
+
+                //---- oiseau ----
+
                 oiseau.deplacement();
                 oiseau.dessiner(dessin);
+
+                //---- tuyau ----
 
                 tuyau.deplacement();
                 tuyau.dessiner(dessin);
@@ -111,6 +140,8 @@ public class Principal extends Canvas implements KeyListener {
 
                 }
 
+                //---- UI ----
+
                 dessin.setColor(Color.BLACK);
                 dessin.setFont(new Font("Arial", Font.BOLD, 20));
                 dessin.drawString("score " + score, LARGEUR - 200, 20);
@@ -119,6 +150,7 @@ public class Principal extends Canvas implements KeyListener {
                 dessin.dispose();
                 //on switch du buffer d'affichage au buffer de preparation
                 this.getBufferStrategy().show();
+
 
             }
 
