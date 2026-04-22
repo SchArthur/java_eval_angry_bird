@@ -11,6 +11,7 @@ public class Oiseau extends Sprite{
 
     public Oiseau() {
         largeur = 50;
+        setCouleur(Color.RED);
     }
 
     public void deplacement(){
@@ -19,7 +20,7 @@ public class Oiseau extends Sprite{
     }
 
     public void dessiner(Graphics2D dessin){
-        dessin.setColor(Color.red);
+        dessin.setColor(couleur);
         dessin.fillOval(x,y, largeur, largeur);
     }
 
