@@ -184,7 +184,6 @@ public class Principal extends Canvas implements KeyListener, MouseListener {
                 //---- PRojectile ----
 
                 tirTimer++;
-                System.out.println(listProjectile.size());
                 if (tir && tirTimer > projectileCooldown) {
                     tirTimer = 0;
                     listProjectile.add(new Projectile(oiseau.getX() + oiseau.getLargeur()/2, oiseau.getY() + oiseau.getLargeur()/2));
@@ -196,6 +195,9 @@ public class Principal extends Canvas implements KeyListener, MouseListener {
                     projectile.dessiner(dessin);
                     if (projectile.doitDetruire()){
                         projectileADetruire.add(projectile);
+                    } else if (tuyau.testCollision(projectile)) {
+                        projectileADetruire.add(projectile);
+                        tuyau.toucherParUnProjectile(projectile);
                     }
                 }
                 for (Projectile projectile : projectileADetruire) {

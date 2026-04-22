@@ -4,11 +4,14 @@ import flappy.Principal;
 import flappy.utils.Utils;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Tuyau extends Sprite{
 
     protected int ecartement = 200;
     protected int marge = 50;
+    protected int vieHaut = 3;
+    protected int vieBas = 3;
 
     public Tuyau(){
         largeur = 100;
@@ -22,6 +25,16 @@ public class Tuyau extends Sprite{
         if(x < -largeur) {
             x = Principal.LARGEUR;
             y = Utils.aleatoire(marge + ecartement, Principal.HAUTEUR - marge);
+            setVieHaut(3);
+            setVieBas(3);
+        }
+    }
+
+    public void toucherParUnProjectile(Projectile projectile){
+        if (projectile.getY() < y-ecartement){
+            setVieHaut(getVieHaut()-1);
+        } else {
+            setVieBas(getVieBas()-1);
         }
     }
 
@@ -35,26 +48,65 @@ public class Tuyau extends Sprite{
     }
 
     public void dessiner(Graphics2D dessin){
-        dessin.setColor(couleur);
-        dessin.fillRect(x,y, largeur, Principal.HAUTEUR);
-        dessin.fillRect(x,y-ecartement-Principal.HAUTEUR, largeur, Principal.HAUTEUR);
+        if (getVieBas() > 0) {
+            dessin.setColor(getColorAvecVie(getVieBas()));
+            dessin.fillRect(x,y, largeur, Principal.HAUTEUR); // Bas
+        }
+        if (getVieHaut() > 0) {
+            dessin.setColor(getColorAvecVie(getVieHaut()));
+            dessin.fillRect(x,y-ecartement-Principal.HAUTEUR, largeur, Principal.HAUTEUR); // Haut
+        }
+    }
+
+    private Color getColorAvecVie(int vie){
+        if (vie == 3){
+            return Color.GREEN;
+        } else if (vie == 2) {
+            return Color.ORANGE;
+        }
+        return Color.RED;
     }
 
     @Override
     public Zone[] getZones() {
+        ArrayList<Zone> zones = new ArrayList<>();
 
-        Zone zoneTuyauBas = new Zone(
-                new Point(x, y),
-                new Point(x + largeur, y),
-                new Point(x, y + Principal.HAUTEUR),
-                new Point(x+ largeur, y + Principal.HAUTEUR));
+        // Zone du bas
+        if (vieBas > 0) {
+            zones.add(
+                new Zone(
+                        new Point(x, y),
+                        new Point(x + largeur, y),
+                        new Point(x, y + Principal.HAUTEUR),
+                        new Point(x+ largeur, y + Principal.HAUTEUR)
+                ));
+        }
 
-        Zone zoneTuyauHaut = new Zone(
-                new Point(x, y - Principal.HAUTEUR),
-                new Point(x + largeur, y - Principal.HAUTEUR),
-                new Point(x, y - ecartement),
-                new Point(x+ largeur, y - ecartement));
+        if (vieHaut > 0) {
+            zones.add(
+                new Zone(
+                        new Point(x, y - Principal.HAUTEUR),
+                        new Point(x + largeur, y - Principal.HAUTEUR),
+                        new Point(x, y - ecartement),
+                        new Point(x+ largeur, y - ecartement)
+                ));
+        }
+        return zones.toArray(new Zone[zones.size()]);
+    }
 
-        return new Zone[]{zoneTuyauBas, zoneTuyauHaut};
+    public int getVieBas() {
+        return vieBas;
+    }
+
+    public void setVieBas(int vieBas) {
+        this.vieBas = vieBas;
+    }
+
+    public int getVieHaut() {
+        return vieHaut;
+    }
+
+    public void setVieHaut(int vieHaut) {
+        this.vieHaut = vieHaut;
     }
 }
