@@ -191,6 +191,7 @@ public class Principal extends Canvas implements KeyListener, MouseListener {
 
                 if (tuyau.testCollision(oiseau) || oiseau.getY() > HAUTEUR - 50) {
                     pause = true;
+                    tuyau.gereImpactAvecJoueur(oiseau, dessin);
                 }
 
                 //---- UI ----

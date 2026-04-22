@@ -25,6 +25,15 @@ public class Tuyau extends Sprite{
         }
     }
 
+    public void gereImpactAvecJoueur(Sprite cible, Graphics2D dessin){
+        dessin.setColor(new Color(184,0,0));
+        if (cible.getY() < y-ecartement-Principal.HAUTEUR){
+            dessin.fillRect(x,y-ecartement-Principal.HAUTEUR, largeur, Principal.HAUTEUR);
+        } else {
+            dessin.fillRect(x,y, largeur, Principal.HAUTEUR);
+        }
+    }
+
     public void dessiner(Graphics2D dessin){
         dessin.setColor(couleur);
         dessin.fillRect(x,y, largeur, Principal.HAUTEUR);
