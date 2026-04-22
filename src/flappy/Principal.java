@@ -220,6 +220,16 @@ public class Principal extends Canvas implements KeyListener, MouseListener {
                 dessin.setFont(new Font("Arial", Font.BOLD, 20));
                 dessin.drawString("score " + score, LARGEUR - 200, 20);
 
+                //---- game ovre ----
+                if (pause) {
+                    dessin.setColor(Color.BLACK);
+                    dessin.setFont(new Font("Arial", Font.BOLD, 40));
+                    dessin.drawString("Game Over", (LARGEUR/2) - 80, HAUTEUR/2);
+                    dessin.setFont(new Font("Arial", Font.BOLD, 20));
+                    dessin.drawString("Appuyez sur la barre espace pour recommencer", (LARGEUR/2) - 200, HAUTEUR/2 + 60);
+
+                }
+
                 //enregistrement du dessin
                 dessin.dispose();
                 //on switch du buffer d'affichage au buffer de preparation
