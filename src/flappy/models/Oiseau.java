@@ -31,6 +31,8 @@ public class Oiseau extends Sprite{
     public void dessiner(Graphics2D dessin){
         dessin.setColor(couleur);
         dessin.fillOval(x,y, largeur, largeur);
+
+        // BEC
     }
 
 

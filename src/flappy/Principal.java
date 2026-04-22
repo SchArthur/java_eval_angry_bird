@@ -2,6 +2,7 @@ package flappy;
 
 import flappy.models.*;
 import flappy.utils.Utils;
+import org.w3c.dom.Text;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +25,8 @@ public class Principal extends Canvas implements KeyListener, MouseListener {
     private ArrayList<Projectile> listProjectile = new ArrayList<>();
     private int projectileCooldown = 30; // frames
     private int tirTimer = projectileCooldown;
+
+    private ArrayList<TextBonus> listeTextBonus = new ArrayList<>();
 
     private boolean tir = false;
 
@@ -81,6 +84,8 @@ public class Principal extends Canvas implements KeyListener, MouseListener {
 
         tirTimer = projectileCooldown;
         tir = false;
+
+        listeTextBonus.clear();
 
         oiseau = new Oiseau();
         oiseau.setX(200);
@@ -147,7 +152,20 @@ public class Principal extends Canvas implements KeyListener, MouseListener {
 
                 //on supprime tous les bonus touche
                 for(Bonus bonus : bonusTouche) {
+                    listeTextBonus.add(new TextBonus(bonus.getX(), bonus.getY()));
                     listeBonus.remove(bonus);
+                }
+
+                ArrayList<TextBonus> textBonusASupprimer = new ArrayList<>();
+                for(TextBonus textBonus : listeTextBonus) {
+                    textBonus.dessiner(dessin);
+                    if (textBonus.vieillir()){
+                        textBonusASupprimer.add(textBonus);
+                    }
+                }
+
+                for(TextBonus textBonus : textBonusASupprimer) {
+                    listeTextBonus.remove(textBonus);
                 }
 
                 //---- oiseau ----
